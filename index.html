@@ -25,13 +25,21 @@
    TOKENS
 ============================================= */
 :root {
-  --pink:        #FFADC9;
-  --pink-glow:   rgba(255,173,201,0.55);
-  --pink-mid:    rgba(255,173,201,0.18);
-  --pink-dim:    rgba(255,173,201,0.07);
-  --pink-line:   rgba(255,173,201,0.2);
-  --cyan:        #00f0ff;
-  --cyan-dim:    rgba(0,240,255,0.08);
+  --pink:        #FFADC8;
+  --pink-glow:   rgba(255,173,200,0.55);
+  --pink-mid:    rgba(255,173,200,0.18);
+  --pink-dim:    rgba(255,173,200,0.07);
+  --pink-line:   rgba(255,173,200,0.2);
+  --cyan:        #ADEEFF;
+  --cyan-glow:   rgba(173,238,255,0.5);
+  --cyan-dim:    rgba(173,238,255,0.08);
+  --lime:        #ADFFB5;
+  --lime-glow:   rgba(173,255,181,0.4);
+  --yellow:      #FFF8AD;
+  --yellow-glow: rgba(255,248,173,0.35);
+  --lavender:    #ADC3FF;
+  --mauve:       #AA8692;
+  --teal:        #4F7580;
   --void:        #080810;
   --void-s:      #0c0c18;
   --void-c:      #101020;
@@ -56,18 +64,8 @@ a { text-decoration:none; }
 ::-webkit-scrollbar-thumb { background:var(--pink); box-shadow:0 0 6px var(--pink-glow); }
 
 /* =============================================
-   NOISE + SCANLINES
+   NOISE + SCANLINES — see upgraded version below
 ============================================= */
-body::after {
-  content:'';
-  position:fixed; inset:0;
-  background:repeating-linear-gradient(
-    0deg,
-    transparent, transparent 3px,
-    rgba(255,173,201,.008) 3px, rgba(255,173,201,.008) 4px
-  );
-  pointer-events:none; z-index:999;
-}
 
 /* =============================================
    GRID OVERLAY (faint perspective grid)
@@ -644,16 +642,13 @@ nav {
 
 /* horizontal scroll strip for appearance */
 .app-strip {
-  display:flex; gap:2px; background:rgba(255,173,201,.05);
+  display:grid; grid-template-columns:1fr 1fr; gap:2px;
+  background:rgba(255,173,201,.05);
   position:relative; z-index:1;
-  overflow-x:auto; scrollbar-width:thin;
-  scrollbar-color:rgba(255,173,201,.2) transparent;
 }
-.app-strip::-webkit-scrollbar { height:2px; }
-.app-strip::-webkit-scrollbar-thumb { background:rgba(255,173,201,.3); }
+
 
 .app-panel {
-  flex:0 0 min(380px,80vw);
   background:var(--void-c);
   padding:clamp(24px,3.5vw,40px);
   position:relative;
@@ -868,6 +863,7 @@ footer a:hover { color:var(--pink); }
   .hero-title { font-size:clamp(52px,14vw,90px); }
   .about-row { grid-template-columns:1fr; }
   .svc-grid { grid-template-columns:1fr; }
+  .app-strip { grid-template-columns:1fr; }
   .gallery-grid { grid-template-columns:repeat(2,1fr); }
   .links-grid.social { grid-template-columns:1fr; }
   .links-grid.payment { grid-template-columns:1fr; }
@@ -879,20 +875,228 @@ footer a:hover { color:var(--pink); }
   .gallery-grid { grid-template-columns:repeat(2,1fr); }
   .hero-dots { display:none; }
 }
+
+/* =============================================
+   NEON ORBS — floating ambient blobs
+============================================= */
+.neon-orbs {
+  position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;
+}
+.norb {
+  position:absolute; border-radius:50%;
+  filter:blur(80px); opacity:0.5;
+  animation:orbDrift 18s ease-in-out infinite alternate;
+}
+.norb-1 {
+  width:420px; height:420px;
+  background:radial-gradient(circle, rgba(255,173,200,0.18) 0%, transparent 70%);
+  top:-10%; left:-8%;
+  animation-duration:20s;
+}
+.norb-2 {
+  width:380px; height:380px;
+  background:radial-gradient(circle, rgba(173,238,255,0.08) 0%, transparent 70%);
+  bottom:5%; right:-5%;
+  animation-duration:24s; animation-delay:-8s;
+}
+.norb-3 {
+  width:260px; height:260px;
+  background:radial-gradient(circle, rgba(255,173,200,0.1) 0%, transparent 70%);
+  top:40%; left:60%;
+  animation-duration:16s; animation-delay:-4s;
+}
+.norb-4 {
+  width:180px; height:180px;
+  background:radial-gradient(circle, rgba(255,173,200,0.08) 0%, transparent 70%);
+  top:70%; left:20%;
+  animation-duration:22s; animation-delay:-12s;
+}
+@keyframes orbDrift {
+  0%   { transform:translate(0,0) scale(1); }
+  33%  { transform:translate(30px,-20px) scale(1.05); }
+  66%  { transform:translate(-20px,30px) scale(0.95); }
+  100% { transform:translate(10px,10px) scale(1.02); }
+}
+
+/* =============================================
+   FLOOR GRID — perspective vaporwave
+============================================= */
+.floor-grid {
+  position:absolute; bottom:0; left:0; right:0;
+  height:320px; pointer-events:none; z-index:1;
+  opacity:0.6;
+}
+
+/* =============================================
+   NEON SCANLINES — upgraded
+============================================= */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(173,238,255,.006) 2px, rgba(173,238,255,.006) 3px
+  );
+  pointer-events:none; z-index:999;
+}
+
+/* =============================================
+   NEON SIGN DECORATION — hero area
+============================================= */
+.neon-sign {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono', monospace;
+  font-size:7px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--cyan);
+  text-shadow: 0 0 6px var(--cyan-glow), 0 0 20px var(--cyan-glow), 0 0 40px rgba(173,238,255,0.2);
+  border:1px solid rgba(173,238,255,0.2);
+  padding:5px 12px;
+  animation:neonFlicker 6s ease-in-out infinite;
+  position:relative;
+}
+.neon-sign::before {
+  content:''; position:absolute; inset:-1px;
+  border:1px solid rgba(173,238,255,0.08);
+  box-shadow: inset 0 0 12px rgba(173,238,255,0.05);
+}
+@keyframes neonFlicker {
+  0%,100% { opacity:1; text-shadow: 0 0 6px var(--cyan-glow), 0 0 20px var(--cyan-glow), 0 0 40px rgba(173,238,255,0.2); }
+  92%      { opacity:1; }
+  93%      { opacity:0.7; text-shadow: 0 0 3px var(--cyan-glow); }
+  94%      { opacity:1; }
+  97%      { opacity:1; }
+  98%      { opacity:0.8; }
+  99%      { opacity:1; }
+}
+
+/* =============================================
+   DIAMOND / STAR MOTIFS
+============================================= */
+.star-motif {
+  display:inline-block;
+  color:var(--yellow);
+  text-shadow:0 0 8px var(--yellow-glow), 0 0 20px var(--yellow-glow);
+  animation:starPulse 3s ease-in-out infinite;
+}
+.star-motif.cyan { color:var(--cyan); text-shadow:0 0 8px var(--cyan-glow), 0 0 20px var(--cyan-glow); animation-delay:.5s; }
+.star-motif.lime { color:var(--lime); text-shadow:0 0 8px var(--lime-glow), 0 0 20px var(--lime-glow); animation-delay:1s; }
+@keyframes starPulse {
+  0%,100% { transform:scale(1); opacity:1; }
+  50%      { transform:scale(1.2); opacity:0.7; }
+}
+
+/* =============================================
+   NEON STRIPE DIVIDERS
+============================================= */
+.neon-stripe {
+  width:100%; height:1px; position:relative;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(173,238,255,0.4) 20%,
+    rgba(255,173,200,0.6) 50%,
+    rgba(173,195,255,0.4) 80%,
+    transparent 100%
+  );
+  box-shadow:0 0 8px rgba(173,238,255,0.2), 0 0 20px rgba(255,173,200,0.1);
+  margin:0;
+}
+.neon-stripe::before {
+  content:''; position:absolute; inset:-1px 0;
+  background:inherit; filter:blur(3px); opacity:0.5;
+}
+
+/* =============================================
+   FLOATING CORNER ORNAMENTS
+============================================= */
+.corner-ornament {
+  position:absolute; width:60px; height:60px;
+  pointer-events:none; opacity:0.25;
+}
+.corner-ornament svg { width:100%; height:100%; }
+.corner-ornament.tl { top:16px; left:16px; }
+.corner-ornament.tr { top:16px; right:16px; transform:scaleX(-1); }
+.corner-ornament.bl { bottom:16px; left:16px; transform:scaleY(-1); }
+.corner-ornament.br { bottom:16px; right:16px; transform:scale(-1); }
+
+/* =============================================
+   RETRO TV / CRT FRAME — appearance panels
+============================================= */
+.app-panel {
+  position:relative;
+}
+.app-panel::before {
+  content:'';
+  position:absolute; inset:0;
+  border:1px solid transparent;
+  border-image:linear-gradient(135deg, rgba(173,238,255,0.3), rgba(255,173,200,0.2), rgba(173,195,255,0.3)) 1;
+  pointer-events:none; z-index:2;
+}
+
+/* =============================================
+   NEON DATA PILLS — keep all pink (clean)
+============================================= */
+.dp-val { color:var(--pink); }
+
+/* =============================================
+   CARD BAR — all pink, consistent
+============================================= */
+/* tag colors — keep pink */
+.n-tag.hi { 
+  border-color:rgba(255,173,200,0.3);
+  color:var(--pink);
+}
+
+
+
+
+
+/* =============================================
+   FOOTER neon touch
+============================================= */
+footer {
+  border-top:1px solid transparent;
+  background:linear-gradient(var(--void-c), var(--void-c)) padding-box,
+             linear-gradient(90deg, rgba(173,238,255,0.15), rgba(255,173,200,0.2), rgba(173,195,255,0.15)) border-box;
+}
+
 </style>
 </head>
 <body>
 
-<!-- subtle grid overlay -->
+<!-- vaporwave grid + neon atmosphere -->
 <div class="grid-overlay" aria-hidden="true">
   <svg viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
     <defs>
       <pattern id="gridpat" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-        <path d="M80 0 L0 0 0 80" fill="none" stroke="rgba(255,173,201,0.025)" stroke-width="1"/>
+        <path d="M80 0 L0 0 0 80" fill="none" stroke="rgba(173,238,255,0.022)" stroke-width="1"/>
       </pattern>
+      <radialGradient id="glowA" cx="20%" cy="30%" r="40%">
+        <stop offset="0%" stop-color="#FFADC8" stop-opacity="0.07"/>
+        <stop offset="100%" stop-color="#FFADC8" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glowB" cx="80%" cy="70%" r="35%">
+        <stop offset="0%" stop-color="#ADEEFF" stop-opacity="0.06"/>
+        <stop offset="100%" stop-color="#ADEEFF" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glowC" cx="55%" cy="10%" r="25%">
+        <stop offset="0%" stop-color="#ADC3FF" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#ADC3FF" stop-opacity="0"/>
+      </radialGradient>
     </defs>
     <rect width="100%" height="100%" fill="url(#gridpat)"/>
+    <rect width="100%" height="100%" fill="url(#glowA)"/>
+    <rect width="100%" height="100%" fill="url(#glowB)"/>
+    <rect width="100%" height="100%" fill="url(#glowC)"/>
   </svg>
+</div>
+
+<!-- floating neon orbs (fixed ambient) -->
+<div class="neon-orbs" aria-hidden="true">
+  <div class="norb norb-1"></div>
+  <div class="norb norb-2"></div>
+  <div class="norb norb-3"></div>
+  <div class="norb norb-4"></div>
 </div>
 
 <!-- NAV -->
@@ -924,11 +1128,23 @@ footer a:hover { color:var(--pink); }
 <section class="hero">
   <div class="hero-diagonal" aria-hidden="true"></div>
 
+  <!-- neon corner ornaments -->
+  <div style="position:absolute;top:var(--nav-h);left:0;right:0;bottom:0;pointer-events:none;z-index:1;">
+    <div style="position:absolute;top:16px;left:16px;width:50px;height:50px;border-top:1px solid rgba(173,238,255,0.25);border-left:1px solid rgba(173,238,255,0.25);"></div>
+    <div style="position:absolute;top:16px;right:16px;width:50px;height:50px;border-top:1px solid rgba(255,173,200,0.25);border-right:1px solid rgba(255,173,200,0.25);"></div>
+    <div style="position:absolute;bottom:60px;left:16px;width:50px;height:50px;border-bottom:1px solid rgba(173,195,255,0.2);border-left:1px solid rgba(173,195,255,0.2);"></div>
+    <div style="position:absolute;bottom:60px;right:16px;width:50px;height:50px;border-bottom:1px solid rgba(173,255,181,0.2);border-right:1px solid rgba(173,255,181,0.2);"></div>
+  </div>
+
   <div class="hero-main">
 
     <!-- LEFT -->
     <div class="hero-left">
-      <div class="hero-tag">Neon Market XIV — Jun 20, 2026</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <span class="neon-sign">◈ NEON MARKET XIV</span>
+        <span class="star-motif">✦</span>
+        <span class="star-motif" style="font-size:10px;">✦</span>
+      </div>
       <div class="hero-counter">SYS_ID // WS-02 // ARTIST</div>
       <h1 class="hero-title">
         <span class="line1">TARGAS</span>
@@ -1012,14 +1228,28 @@ footer a:hover { color:var(--pink); }
   </div>
 </section>
 
+<div class="neon-stripe"></div>
+
+<!-- decorative star row -->
+<div style="text-align:center;padding:8px 0;background:var(--void);position:relative;z-index:2;">
+  <span class="star-motif" style="font-size:10px;margin:0 8px;">◆</span>
+  <span class="star-motif" style="font-size:8px;margin:0 8px;opacity:.6;">◈</span>
+  <span class="star-motif" style="font-size:6px;margin:0 8px;opacity:.4;">✦</span>
+  <span class="star-motif" style="font-size:8px;margin:0 8px;opacity:.7;">◆</span>
+  <span class="star-motif" style="font-size:10px;margin:0 8px;">◈</span>
+  <span class="star-motif" style="font-size:8px;margin:0 8px;opacity:.6;">✦</span>
+  <span class="star-motif" style="font-size:6px;margin:0 8px;opacity:.4;">◆</span>
+</div>
+<div class="neon-stripe"></div>
+
 <!-- ═══════ DISCOUNT BANNER ═══════ -->
 <div class="discount-banner reveal">
-  <div class="disc-num">20%</div>
+  <div class="disc-num" style="text-shadow:0 0 30px rgba(255,248,173,0.5);color:var(--yellow);">20%</div>
   <div class="disc-text">
     <strong>Event discount on all services.</strong><br>
     Same quality, same turnaround — this is a Neon Market exclusive. Don't sleep on it.
   </div>
-  <div class="disc-num">OFF</div>
+  <div class="disc-num" style="text-shadow:0 0 30px rgba(255,248,173,0.5);color:var(--yellow);">OFF</div>
 </div>
 
 <!-- ═══════ ABOUT ═══════ -->
@@ -1101,7 +1331,14 @@ footer a:hover { color:var(--pink); }
       <div class="svc-card reveal">
         <div class="card-bar"></div>
         <div class="card-idx">01</div>
-        <span class="card-icon">🖼</span>
+        <div class="card-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="14" r="13" stroke="#FFADC8" stroke-width="1" stroke-opacity="0.4"/>
+            <path d="M8 20 C8 20 10 12 14 10 C18 8 20 10 19 14 C18 17 15 18 14 16 C13 14 15 13 16 14" stroke="#FFADC8" stroke-width="1.5" stroke-linecap="round" fill="none" style="filter:drop-shadow(0 0 4px #FFADC8)"/>
+            <circle cx="9" cy="19" r="2" fill="#FFADC8" fill-opacity="0.7" style="filter:drop-shadow(0 0 6px #FFADC8)"/>
+            <path d="M7 21 L8 22" stroke="#FFADC8" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
         <h3 class="card-title">Art</h3>
         <p class="card-sub">Portraits — Digital Media</p>
         <p class="card-desc">Digital portraits of your Warrior of Light — bust-up focused on your character's vibe and personality.</p>
@@ -1130,7 +1367,16 @@ footer a:hover { color:var(--pink); }
       <div class="svc-card reveal">
         <div class="card-bar"></div>
         <div class="card-idx">02</div>
-        <span class="card-icon">🔮</span>
+        <div class="card-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="12" r="8" stroke="#ADEEFF" stroke-width="1" stroke-opacity="0.4"/>
+            <circle cx="14" cy="12" r="8" fill="#ADEEFF" fill-opacity="0.06" style="filter:drop-shadow(0 0 8px #ADEEFF)"/>
+            <circle cx="11" cy="10" r="2" fill="#ADEEFF" fill-opacity="0.35"/>
+            <path d="M10 20 L18 20" stroke="#ADEEFF" stroke-width="1.5" stroke-linecap="round" style="filter:drop-shadow(0 0 4px #ADEEFF)"/>
+            <path d="M12 20 L12 23 M16 20 L16 23" stroke="#ADEEFF" stroke-width="1" stroke-linecap="round" stroke-opacity="0.6"/>
+            <path d="M11 23 L17 23" stroke="#ADEEFF" stroke-width="1.5" stroke-linecap="round" style="filter:drop-shadow(0 0 4px #ADEEFF)"/>
+          </svg>
+        </div>
         <h3 class="card-title">Fortune Telling</h3>
         <p class="card-sub">Tarot · 78 Rider Waite Deck</p>
         <p class="card-desc">Tarot reading of every type, using the 78 Rider Waite deck. Payment in Gil.</p>
@@ -1159,7 +1405,14 @@ footer a:hover { color:var(--pink); }
         <div class="card-bar"></div>
         <div class="badge-new">✦ NEW</div>
         <div class="card-idx">03</div>
-        <span class="card-icon">♡</span>
+        <div class="card-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 4 L15.5 10 L21 10 L16.5 13.5 L18 19.5 L14 16 L10 19.5 L11.5 13.5 L7 10 L12.5 10 Z" stroke="#FFF8AD" stroke-width="1.2" fill="#FFF8AD" fill-opacity="0.12" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px #FFF8AD)"/>
+            <circle cx="21" cy="6" r="1.5" fill="#FFADC8" fill-opacity="0.7" style="filter:drop-shadow(0 0 4px #FFADC8)"/>
+            <circle cx="6" cy="20" r="1" fill="#ADEEFF" fill-opacity="0.7" style="filter:drop-shadow(0 0 4px #ADEEFF)"/>
+            <path d="M22 18 L22 22 M20 20 L24 20" stroke="#FFADC8" stroke-width="1" stroke-linecap="round" stroke-opacity="0.5"/>
+          </svg>
+        </div>
         <h3 class="card-title">Chibi &amp; Emotes</h3>
         <p class="card-sub">Small Format — 5 Options</p>
         <p class="card-desc">New for this market, and a step into territory I'm expanding into. Small in size, big in personality — not a regular offering, but I'm bringing it here to see how it lands.</p>
@@ -1274,6 +1527,8 @@ footer a:hover { color:var(--pink); }
 </section>
 
 
+<div class="neon-stripe"></div>
+
 <!-- ═══════ GALLERY ═══════ -->
 <section id="gallery">
   <div class="wrap">
@@ -1299,6 +1554,8 @@ footer a:hover { color:var(--pink); }
     </div>
   </div>
 </section>
+
+<div class="neon-stripe"></div>
 
 <!-- ═══════ CONTACT ═══════ -->
 <section id="contact">
