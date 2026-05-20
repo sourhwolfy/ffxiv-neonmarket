@@ -648,19 +648,21 @@ nav {
   display:grid; grid-template-columns:1fr 1fr; gap:2px;
   background:rgba(255,173,201,.05);
   position:relative; z-index:1;
-  align-items:stretch;
+  height:clamp(480px, 60vw, 720px); /* fixed height — both panels equal */
 }
 
 .app-panel {
   background:var(--void-c);
-  padding:clamp(24px,3.5vw,40px);
+  padding:clamp(16px,2.5vw,28px);
   position:relative;
   display:flex; flex-direction:column;
+  overflow:hidden;
+  height:100%;
 }
 
 /* Standard View frame fills remaining panel height */
 .app-panel .app-frame-fill {
-  flex:1; min-height:0;
+  flex:1; min-height:0; overflow:hidden;
 }
 .app-panel-label {
   font-size:7px; letter-spacing:4px; text-transform:uppercase;
@@ -681,8 +683,15 @@ nav {
 
 /* multi-frame layout */
 .app-frames-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-bottom:3px;
+  display:grid; grid-template-columns:1fr 1fr; gap:3px;
+  flex:2; min-height:0; /* takes 2/3 of panel height */
 }
+.app-frames-grid .app-frame { height:100%; }
+.app-frame-wide {
+  flex:1; min-height:0; margin-top:3px;
+}
+.app-frame-wide .app-frame { height:100%; }
+/* legacy aspect-ratio classes — kept but overridden inside app-panel */
 .app-frame-9x16 { aspect-ratio:9/14; }
 .app-frame-16x9 { aspect-ratio:16/9; }
 .app-frame-solo { aspect-ratio:3/4; }
@@ -1511,15 +1520,17 @@ footer {
       <div class="app-panel">
         <div class="app-panel-label enhanced">✦ Enhanced View</div>
         <div class="app-frames-grid">
-          <div class="app-frame app-frame-9x16">
+          <div class="app-frame">
             <img src="assets/TargasChawonNeonImg3.png" class="zoomable" alt="Targas Chawon Enhanced — front">
           </div>
-          <div class="app-frame app-frame-9x16">
+          <div class="app-frame">
             <img src="assets/TargasChawonNeonImg2.png" class="zoomable" alt="Targas Chawon Enhanced — side">
           </div>
         </div>
-        <div class="app-frame app-frame-16x9" style="margin-top:3px;">
-          <img src="assets/TargasChawonNeonImg1.png" class="zoomable" alt="Targas Chawon Enhanced — wide">
+        <div class="app-frame-wide">
+          <div class="app-frame">
+            <img src="assets/TargasChawonNeonImg1.png" class="zoomable" alt="Targas Chawon Enhanced — wide">
+          </div>
         </div>
       </div>
 
